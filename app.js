@@ -12,8 +12,8 @@ res. send("hello clair");
 
 app.get('/about',function(req, res){
     res.send("<h1>same hoes</h1>");
-})
+});
 
-app.listen(port, funtion(){
+app.listen(port, function(){
 
 });
