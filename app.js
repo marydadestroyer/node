@@ -2,9 +2,9 @@
 var http = require('http');
 var path = require('path');
 var bodyParser = require("body-parser");
-const express = require("express");  //saying we require it
-const app = express();   //this variable is going to call express
-const port = process.env.PORT || 3000;   //andre  for maintainablility
+var express = require("express");  //saying we require it
+var app = express();   //this variable is going to call express
+var port = process.env.PORT || 3000;   //andre  for maintainablility
 
 
 
@@ -17,7 +17,7 @@ var task = ["clean", "laundry"];
 
 // single slash is home page
 app.get('/', function(req, res){
-res.render('index');
+res.render('index', {task:task});
 
 });
 
