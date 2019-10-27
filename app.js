@@ -67,20 +67,20 @@ app.post('/addtask',function(req, res){
         }
         res.redirect('/');
 
-    )};
+    });
 });
 //REMOVE TASK
 app.post('/removetask',function(req, res){
     var completeTask = req.body.check;
-    //task.push(newTask);
-    if(typeOf completeTask ==='string'){
+    
+    if(typeof completeTask ==='string'){
       Todo.updateOne({ item: completeTask}, {fin: true},function(err){
           console.log(err);
       })
 
-    }else If(typeOf completeTask === "object"){
+    }else if (typeof completeTask === "object"){
         for(var i = 0; i < completeTask.length; i++){
-            Todo.updateOne({ item: completeTask[i]}, {fin: true},function(err){
+            Todo.updateOne({item: completeTask[i]}, {fin: true},function(err){
                 console.log(err);
             })
 
@@ -101,9 +101,11 @@ app.post('/deleteTodo', funtion(req, res){
                 console.log(err);
             });
         }
-    }
-    res.redirect('/');
+    } 
+      res.redirect('/');
 });
+    
+
 
 http.createServer(app).listen(port, function(){
 
