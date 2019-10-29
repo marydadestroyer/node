@@ -15,7 +15,7 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ encoded: false}));
-const Todo =require('./models/todo.model)');    //changed here
+const Todo =require('./models/todo.model');    //changed here
 
 const mongoDB = 'mongodb+srv://hooman:margretTHATCHERiscool@cluster0-rhcqr.mongodb.net/test?retryWrites=true&w=majority';
 //connection string to db pasted from clusetr sandbox
