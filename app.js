@@ -15,10 +15,11 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ encoded: false}));
-const Todo =require('./models/todo.model/)');
+const Todo =require('.models/todo.model)');    //changed here
+
 const mongoDB = 'mongodb+srv://hooman:margretTHATCHERiscool@cluster0-rhcqr.mongodb.net/test?retryWrites=true&w=majority';
 //connection string to db pasted from clusetr sandbox
-mongooose.connect(mongoDB);
+mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, "MongoDB connection error:"));
@@ -37,7 +38,7 @@ app.get('/', function(req, res){
         }else{
             task =[];
             complete =[];
-            for(i = 0; i< todo,length; i ++){
+            for(i = 0; i< todo.length; i ++){
                 if(todo[i].done){
                     complete.push(todo[i].item);
                 }else{
