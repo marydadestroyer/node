@@ -15,7 +15,7 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ encoded: false}));
-const Todo =require('.models/todo.model)');    //changed here
+const Todo =require('./models/todo.model)');    //changed here
 
 const mongoDB = 'mongodb+srv://hooman:margretTHATCHERiscool@cluster0-rhcqr.mongodb.net/test?retryWrites=true&w=majority';
 //connection string to db pasted from clusetr sandbox
@@ -73,7 +73,7 @@ app.post('/addtask',function(req, res){
 //REMOVE TASK
 app.post('/removetask',function(req, res){
     var completeTask = req.body.check;
-    
+
     if(typeof completeTask ==='string'){
       Todo.updateOne({ item: completeTask}, {fin: true},function(err){
           console.log(err);
@@ -102,10 +102,10 @@ app.post('/deleteTodo', function(req, res){
                 console.log(err);
             });
         }
-    } 
+    }
       res.redirect('/');
 });
-    
+
 
 
 http.createServer(app).listen(port, function(){
