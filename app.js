@@ -90,7 +90,7 @@ app.post('/removetask',function(req, res){
     res.redirect('/');
 });
 // DELETE TASK
-app.post('/deleteTodo', funtion(req, res){
+app.post('/deleteTodo', function(req, res){
     var deleteTask = req.body.delete;
     if(typeof deleteTask =='string'){
         Todo.deleteOne({item: deleteTask}, function(err){
