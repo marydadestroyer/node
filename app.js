@@ -36,20 +36,12 @@ app.get('/', function(req, res){
             console.log(err);
 
         }else{
-            task =[];
-            complete =[];
-            for(i = 0; i< todo.length; i ++){
-                if(todo[i].done){
-                    complete.push(todo[i].item);
-                }else{
-                    //adding items to appropriate db
-                    task.push(todo[i].item);
-                }
-
-            }
+            res.json( );
         }
     })
-    res.render('index', {task:task, complete:complete});
+    // not going to return change res render to json
+    //willl sne dback a var
+
 
 });
 //ADD TASK
