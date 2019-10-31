@@ -34,13 +34,15 @@ app.get('/', function(req, res){
     Todo.find(function(err, todo){
         if(err){
             console.log(err);
+            res.json({ "error":err})
 
         }else{
-            res.json( );
+            //filling with  our var
+            res.json( todo);
         }
     })
     // not going to return change res render to json
-    //willl sne dback a var
+    //willl sne dback a
 
 
 });
@@ -56,9 +58,11 @@ app.post('/addtask',function(req, res){
     newTodo.save(function(err){
         if(err){
             console.log(err);
+            res.json({ "error":err})
 
         }
-        res.redirect('/');
+        //change this!
+        res.json(todo);
 
     });
 });
