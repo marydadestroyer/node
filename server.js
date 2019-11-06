@@ -1,109 +1,101 @@
 
-var http = require('http');
 var path = require('path');
+const express = require("express");
 var bodyParser = require("body-parser");
-var express = require("express");  //saying we require it
-var app = express();   //this variable is going to call express
+const app = express();
 var mongoose = require('mongoose');
-const fetch = require('node-fetch');
-var app = express();
-var port = process.env.PORT || 3000;   //andre  for maintainablility
+const port = process.env.PORT || 5000;
 
+//app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", 'ejs');
+app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.set('views', path.join(__dirname, 'views'));
-app.set("view engine", "ejs");
-app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ encoded: false}));
-const Todo =require('./models/todo.model');    //changed here
-
-const mongoDB = 'mongodb+srv://hooman:margretTHATCHERiscool@cluster0-rhcqr.mongodb.net/test?retryWrites=true&w=majority';
-//connection string to db pasted from clusetr sandbox
+app.use(bodyParser.urlencoded({ extended: false }));
+const Todo = require('./models/todo.model');
+const mongoDB = 'mongodb+srv://testConnection:b8RwqJYgo4hD1xhe@nodetodoexample-iqnde.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, "MongoDB connection error:"));
 
-//10 22
-//removed item in array list
-var task = [];
-var complete = [];
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/public/index.html'))
+})
 
-// single slash is home page
-app.get('/', function(req, res){
+app.get('/api', function  (req, res) {
     Todo.find(function(err, todo){
         if(err){
             console.log(err);
-            res.json({ "error":err})
-
         }else{
-            //filling with  our var
-            res.json( todo);
+            res.json({"results" : todo});
         }
-    })
-    // not going to return change res render to json
-    //willl sne dback a
-
-
+    });
 });
-//ADD TASK
-app.post('/addtask',function(req, res){
 
+app.post('/api', function  (req, res) {
     let newTodo = new Todo({
         item: req.body.newtask,
-
-        fin: false
+        done: false
     });
-
-    newTodo.save(function(err){
-        if(err){
-            console.log(err);
-            res.json({ "error":err})
-
+    newTodo.save(function(err, todo){
+        if (err){
+            res.json({"Error: ":err})
+        }else{
+            res.json({"Status: ": "Successful", "ObjectId": todo.id})
         }
-        //change this!
-        res.json(todo);
-
     });
 });
-//REMOVE TASK
-app.post('/removetask',function(req, res){
-    var completeTask = req.body.check;
 
-    if(typeof completeTask ==='string'){
-      Todo.updateOne({ item: completeTask}, {fin: true},function(err){
-          console.log(err);
-      })
-
-    }else if (typeof completeTask === "object"){
-        for(var i = 0; i < completeTask.length; i++){
-            Todo.updateOne({item: completeTask[i]}, {fin: true},function(err){
-                console.log(err);
-            })
-
-        }
-    }
-    res.redirect('/');
-});
-// DELETE TASK
-app.post('/deleteTodo', function(req, res){
-    var deleteTask = req.body.delete;
-    if(typeof deleteTask =='string'){
-        Todo.deleteOne({item: deleteTask}, function(err){
-            console.log(err);
+app.put('/api', function  (req, res)  {
+    var id = req.body.check;
+    var error = {};
+    if(typeof id === "string"){
+        Todo.updateOne({_id: id},{done: true}, function(err){
+            if (err){
+                error = {"Error: ":err};
+            }
         });
-    }else if(typeof deleteTask == 'object'){
-        for(var i = 0; i < deleteTask.length ; i++){
-            Todo.deleteOne({item: deleteTask[i]}, function(err){
-                console.log(err);
-            });
+    }else if (typeof id === "object"){
+        for(var i = 0; i < id.length; i++){
+            Todo.updateOne({_id: id[i]},{done: true}, function(err){
+            if (err){
+                error = {"Error: ":err};
+            }
+        });
         }
     }
-      res.redirect('/');
+    if(error){
+        res.json(error);
+    }else{
+        res.json({"Status: ": "Successful"})
+    }
 });
 
+app.delete("/api", function  (req, res) {
+    var deleteTask = req.body.delete;
+    var error = {};
+    if(typeof deleteTask === "string"){
+        Todo.deleteOne({_id: deleteTask}, function(err){
+            if (err){
+                error = {"Error: ":err};
+            }
+        });
+    }else if (typeof deleteTask === "object"){
+        for(var i = 0; i < deleteTask.length; i++){
+            Todo.deleteOne({_id: deleteTask}, function(err){
+            if (err){
+                error = {"Error: ":err};
+            }
+        });
+        }
+    }
+    if(error){
+        res.json(error);
+    }else{
+        res.json({"Status: ": "Successful"})
+    }
+});
 
-
-http.createServer(app).listen(port, function(){
-
+app.listen(port, function(){
 });
